@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import { BrowserRouter as Router, Route,Switch, Link } from "react-router-dom";
-import SignUp from '../SignUp/SignUp.js'
+import ForgotPassword from '../ForgotPassword/ForgotPassword.js'
 
 class SignIn extends Component{
 	constructor(props){
@@ -58,6 +58,7 @@ class SignIn extends Component{
 	}
 	render(){
 		return(
+				<Router>
 				<div>
 					<form onSubmit={this.handleSubmit}>
 					<input 
@@ -74,10 +75,12 @@ class SignIn extends Component{
 					onChange={this.changeHandler}
 					/>
 					<br/>
+					<Link to='/forgot'><button>ForgotPassword</button></Link>
 					<button type="submit">Login</button>
 					</form>
-
 				</div>
+				<Route path="/forgot" component={ForgotPassword} />
+				</Router>
 			)
 	}
 }

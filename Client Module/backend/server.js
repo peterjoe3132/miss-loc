@@ -36,7 +36,7 @@ app.get('/',function(req,res){
 })
 
 app.post('/signin',function(req,res){
-	console.log(req.body);
+	// console.log(req.body);
 	var responseData=req.body;
 	var username=responseData.username;
 	var password=responseData.password;
