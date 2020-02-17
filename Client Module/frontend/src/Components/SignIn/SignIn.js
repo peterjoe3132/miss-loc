@@ -79,6 +79,7 @@ class SignIn extends Component{
 					<button type="submit">Login</button>
 					</form>
 				</div>
+				
 				<Route path="/forgot" component={ForgotPassword} />
 				</Router>
 			)
