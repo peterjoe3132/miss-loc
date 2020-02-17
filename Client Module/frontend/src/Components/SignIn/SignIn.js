@@ -7,7 +7,7 @@ class SignIn extends Component{
 		super(props);
 		this.state={
 			username:'',
-			password:''			
+			password:''	,
 		};
 	}
 
@@ -75,7 +75,7 @@ class SignIn extends Component{
 					onChange={this.changeHandler}
 					/>
 					<br/>
-					<Link to='/forgot'><button>ForgotPassword</button></Link>
+					<Link to='/forgot'><button >ForgotPassword</button></Link>
 					<button type="submit">Login</button>
 					</form>
 				</div>
