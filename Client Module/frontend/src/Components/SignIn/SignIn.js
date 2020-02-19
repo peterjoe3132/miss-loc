@@ -1,6 +1,10 @@
 import React,{Component} from 'react';
 import { BrowserRouter as Router, Route,Switch, Link } from "react-router-dom";
 import ForgotPassword from '../ForgotPassword/ForgotPassword.js'
+import SignUp from '../SignUp/SignUp.js'
+
+import {Card ,Button ,Form} from 'react-bootstrap'
+import './SignIn.css'
 
 class SignIn extends Component{
 	constructor(props){
@@ -59,28 +63,37 @@ class SignIn extends Component{
 	render(){
 		return(
 				<Router>
-				<div>
+				<div id='container-signin'>
 					<form onSubmit={this.handleSubmit}>
-					<input 
-					type="text"
-					placeholder="username"
-					name="username"
-					onChange={this.changeHandler}
-					/>
-					<br/>
-					<input 
-					type="password"
-					placeholder="password"
-					name="password"
-					onChange={this.changeHandler}
-					/>
-					<br/>
-					<Link to='/forgot'><button >ForgotPassword</button></Link>
-					<button type="submit">Login</button>
+						<Card className="text-center">
+							  <Card.Header>Sign In</Card.Header>
+							  <Card.Body>
+							    <Card.Text>
+									     <Form.Group >
+										    <Form.Control type="text" placeholder="Enter Username" name="username" onChange={this.changeHandler} required/>
+										  									  
+										    </Form.Group>
+										  <Form.Group >
+										    <Form.Control type="password" placeholder="Enter Password" name="password" onChange={this.changeHandler} required/>
+										  </Form.Group>
+										 </Card.Text>
+
+									    <Button variant="primary" type="submit">Login</Button>
+									    <br/>
+									    <Link to='/forgot'><Button variant="light" id="ForgotPassword">Forgot your password?</Button></Link>
+
+							  </Card.Body>
+							  <Card.Footer className="text-muted">Not a member yet ? <a href="/signup">Join here</a></Card.Footer>
+						</Card>
 					</form>
+
 				</div>
-				
+
+
+
 				<Route path="/forgot" component={ForgotPassword} />
+				<Route path="/signup" component={SignUp} />
+
 				</Router>
 			)
 	}

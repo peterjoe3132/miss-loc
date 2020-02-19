@@ -5,9 +5,10 @@ const bcrypt=require('bcrypt');
 const session=require('express-session');
 
 
-var mysql=require('mysql')
-var cors=require('cors')
+var mysql=require('mysql');
+var cors=require('cors');
 var bodyParser=require('body-parser');
+var nodemailer=require('nodemailer');
 
 var connection=mysql.createConnection({
 	host	:'localhost',
@@ -25,6 +26,23 @@ app.use(bodyParser.json());
 app.use(session({
 	'secret': "81379984948137998494", 
 }))
+
+var transporter=nodemailer.createTransport({
+	service:'yahoo',
+	newline: 'unix',
+    path: '/usr/sbin/sendmail',	
+	auth: {
+		user:'peterjoep@yahoo.com',
+		pass:'yzhb ivzo enrd mzfv'
+	} 
+});
+
+var mailOptions={
+	from: "peterjoep@yahoo.com",
+	to:"joannpelza0@gmail.com",
+	subject:'Password Reset Request for username-',
+	text:'Njan oru sambhavam aanu ' 
+}
 
 app.get('/',function(req,res){
 	connection.query('select 1+1 AS Solution',function(err,result,fields){
@@ -88,7 +106,16 @@ app.post('/signin',function(req,res){
 
 			if(result.length>0){
 				resp={"key": "Username Exists" }
+				transporter.sendMail(mailOptions,function(error,info){
+					if(error){
+						console.log("error at email "+error);
+					}
+					else{
+						console.log('Email Sent'+info.response);
+					}
+				});
 				res.send(resp);
+
 			}
 			else{
 						console.log('new user')
