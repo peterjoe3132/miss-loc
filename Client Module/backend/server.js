@@ -104,12 +104,12 @@ app.post('/signin',function(req,res){
 		var password=req.body.password;
 		var resp={"key": ""}
 
-		console.log('new user')
 		var sql="SELECT id FROM user WHERE username=?";
 		connection.query(sql,username,function(err,result){
 
 			if(result.length>0){
-				resp={"key": "Username Exists" }
+				//Username exists
+				resp={"key": "0040" }
 
 
 // -------------------------------------------------------------------------------------
@@ -128,15 +128,13 @@ app.post('/signin',function(req,res){
 
 			}
 			else{
-						console.log('new user')
-
 				var pass=bcrypt.hashSync(password,5);
 				var sql1="INSERT INTO user(username,password,email,fullname) VALUES(?,?,?,?)"
 				connection.query(sql1,[username,pass,email,fullname],function(err,result){
 					if(err) throw err;
-					// console.log("number of affected rows-"+result.affectedRows);
+					// User successfully created
 					resp={
-						"key": "User successfully created"
+						"key": "0050"
 					}
 					res.send(resp);
 				})
