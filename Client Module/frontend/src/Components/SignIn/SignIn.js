@@ -84,7 +84,7 @@ class SignIn extends Component{
 		
 	})
 	.catch(function(error){
-		console.log("ERROR-"+error);
+		console.log("Error-"+error);
 	})
 
 	}
@@ -94,7 +94,7 @@ class SignIn extends Component{
 				<div id='container-signin'>
 					<form onSubmit={this.handleSubmit}>
 						<Card className="text-center">
-							  <Card.Header>Sign In</Card.Header>
+							  <Card.Header as="h5">Sign In</Card.Header>
 							  <Card.Body>
 							    <Card.Text>
 									     <Form.Group >
@@ -106,7 +106,7 @@ class SignIn extends Component{
 										 </Card.Text>
 									    <Button variant="primary" type="submit">Login</Button>
 									    <br/>
-									    <Link to='/forgot'><Button variant="light" id="ForgotPassword">Forgot your password?</Button></Link>
+									    <Link to='/forgot'><Button variant="light" id="ForgotPassword">Forgot Password?</Button></Link>
 							  </Card.Body>
 							  <Card.Footer className="text-muted">Not a member yet ? <a href="/signup">Join here</a></Card.Footer>
 						</Card>

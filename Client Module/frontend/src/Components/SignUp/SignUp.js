@@ -103,7 +103,7 @@ class SignUp extends Component{
 					<div id='container-signup'>
 					<form>
 						<Card className="text-center">
-						  <Card.Header>Sign Up</Card.Header>
+						  <Card.Header as="h5">Sign Up</Card.Header>
 						  <Card.Body>
 						    <Card.Text>
 						    		 <Form.Group >								    

@@ -37,12 +37,8 @@ var transporter=nodemailer.createTransport({
 	} 
 });
 
-var mailOptions={
-	from: "peterjoep@yahoo.com",
-	to:"joannpelza0@gmail.com",
-	subject:'Password Reset Request for username-',
-	text:'Njan oru sambhavam aanu ' 
-}
+var code_to_be_send;
+var id;
 
 app.get('/',function(req,res){
 	connection.query('select 1+1 AS Solution',function(err,result,fields){
@@ -110,20 +106,6 @@ app.post('/signin',function(req,res){
 			if(result.length>0){
 				//Username exists
 				resp={"key": "0040" }
-
-
-// -------------------------------------------------------------------------------------
-//SENDING EMAIL
-				// transporter.sendMail(mailOptions,function(error,info){
-				// 	if(error){
-				// 		console.log("error at email "+error);
-				// 	}
-				// 	else{
-				// 		console.log('Email Sent'+info.response);
-				// 	}
-				// });
-
-
 				res.send(resp);
 
 			}
@@ -141,5 +123,87 @@ app.post('/signin',function(req,res){
 			}
 		})
 	})
+
+	app.post('/forgotemail',function(req,res){
+		var email=req.body.email;
+	    code_to_be_send = Math.floor((Math.random() * 1000000) + 1);
+		var resp={'key': ""}
+		if(check==1){
+			var sql='select id,username,email from user where email=?'
+			connection.query(sql,email,function(err,result){
+				if(err) throw err;
+
+				if(result.length <1 ){
+					//email doesn't exist
+					resp={'key': "0060" };
+					res.send(resp);
+				}
+				else{
+					//email exists.
+					id=result[0].id;
+					resp={'key': "0070" }
+					var mailOptions={
+						from: "peterjoep@yahoo.com",
+						to:result[0].email,
+						subject:'Password Reset Request for username-'+result[0].username,
+						text:'Please enter the code on the Forgot Password Page '+ code_to_be_send
+					}
+
+					transporter.sendMail(mailOptions,function(error,info){
+						if(error){
+							console.log("error at email "+error);
+						}
+						else{
+							console.log('Email Sent'+info.response);
+							res.send(resp);
+						}
+					});
+
+
+				}
+			})
+		}
+	})
+
+	app.post('/forgotcode',function(req,res){
+		var code=req.body.code;
+		var resp={'key': "" }
+		console.log(code +"  "+code_to_be_send)
+		if(code==code_to_be_send){
+			//code matches
+			resp={'key': "0080" }
+			res.send(resp);
+		}else{
+			//invalid code
+			resp={'key': "0090" }
+			res.send(resp);
+		}
+
+	})
+
+	app.post('/forgotpassword',function(req,res){
+		var password=req.body.password;
+		var resp={'key': "" }
+		var pass=bcrypt.hashSync(password,5);
+		var sql='UPDATE user SET password=? WHERE id=?'
+		connection.query(sql,[pass,id],function(err,result){
+			if(err) throw err;
+
+			if(result.affectedRows>0){
+				//update successful
+				resp={'key': "0100" }
+				res.send(resp);
+			}
+			else{
+				resp={'key': "0200" }
+				res.send(resp);
+			}
+		})
+
+
+	})
+
+
+
 
 app.listen(port,()=>console.log(`Example app listening on port ${port}!`));
