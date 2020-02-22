@@ -1,4 +1,6 @@
 import React,{Component} from 'react'
+import './SignUp.css'
+import { Card ,Button,Form} from 'react-bootstrap'
 
 class SignUp extends Component{
 	constructor(props){
@@ -8,7 +10,9 @@ class SignUp extends Component{
 			username:'',
 			password:'',
 			email:'',
-			fullname:''
+			fullname:'',
+			confirm_password:'',
+			username_taken:false
 		};
 	}
 	changeHandler=(event)=>{
@@ -17,6 +21,13 @@ class SignUp extends Component{
 		this.setState({[key]:val});
 	}
 	handleSubmit=(event)=>{
+
+		const { password ,confirm_password}=this.state;
+
+		if(password != confirm_password){
+			alert("password dont match");
+		}
+		else {
 		event.preventDefault();
 		let data={
 			fullname:this.state.fullname,
@@ -27,8 +38,6 @@ class SignUp extends Component{
 
 		let body_data=JSON.stringify(data);
 		var url='http://127.0.0.1:8080/signup';
-
-		// console.log(body_data)
 
 		var request={
 			method:"POST",
@@ -55,42 +64,41 @@ class SignUp extends Component{
 		// .catch(function(error){
 		// console.log("ERROR-"+error);
 		// })
+		}
 	}
 
 	render(){
 		return(
-				<form onSubmit={this.handleSubmit}>
-					<input 
-					type="text"
-					placeholder="fullname"
-					name="fullname"
-					onChange={this.changeHandler}
-					/>
-					<br/>
-					<input 
-					type="email"
-					placeholder="email"
-					name="email"
-					onChange={this.changeHandler}
-					/>
-					<br/>
-					<input 
-					type="text"
-					placeholder="username"
-					name="username"
-					onChange={this.changeHandler}
-					/>
-					<br/>
-					<input 
-					type="password"
-					placeholder="password"
-					name="password"
-					onChange={this.changeHandler}
-					/>
-					<br/>
-					<button type="submit">Sign Up</button>
-				</form>		
-
+				
+					<div id='container-signup'>
+					<form onSubmit={this.handleSubmit}>
+						<Card className="text-center">
+						  <Card.Header>Sign Up</Card.Header>
+						  <Card.Body>
+						    <Card.Text>
+						    		 <Form.Group >								    
+									    <Form.Control type="text" placeholder=" Name " name="fullname" onChange={this.changeHandler} />
+									  </Form.Group> 
+									  <Form.Group >								    
+									    <Form.Control type="email" placeholder=" Email " name="email" onChange={this.changeHandler} />
+									  </Form.Group>
+									  <Form.Group >								    
+									    <Form.Control type="text" placeholder=" Username " name="username" onChange={this.changeHandler} />
+									  </Form.Group>
+									   <Form.Group >								    
+									    <Form.Control type="password" placeholder=" Password " name="password" onChange={this.changeHandler} />
+									  </Form.Group>
+									   <Form.Group >								    
+									    <Form.Control type="password" placeholder=" Confirm Password " name="confirm-password" onChange={this.changeHandler} />
+									  </Form.Group>
+						    </Card.Text>
+						    <Button variant="success" type='submit'> Sign Up</Button>
+						  </Card.Body>
+						  <Card.Footer className="text-muted">Already a member ? Login <a href='/signin'>here</a></Card.Footer>
+						</Card>
+						</form>
+					</div>
+							
 			)
 	}
 }

@@ -64,11 +64,11 @@ app.post('/signin',function(req,res){
 	connection.query(sql1,username,function(err,result){
 		if(err) throw err;
 
-
 		var resp={"key": "" };
 
 		if(result[0]==undefined){
-			resp={"key": "username doesn't exist "};
+			//username doesnt exist
+			resp={"key": "0010"};
 			res.send(resp);
 		}else
 			if(bcrypt.compareSync(password,result[0].password)){
@@ -82,11 +82,15 @@ app.post('/signin',function(req,res){
 				// req.session.user.expires=new Date(
 				// 	Date.now()+3*24*3600*1000;
 				// 	);
-				resp={"key":"You are logged in , Welcome ! "};
+
+				//successful login
+				resp={"key":" 0030"};
 				res.send(resp);
 			}
 			else{
-				 resp={"key":" Incorrect password"};
+
+				//passwords dont match	
+				 resp={"key":"0020"};
 				 res.send(resp);
 			}
 		})
@@ -106,14 +110,20 @@ app.post('/signin',function(req,res){
 
 			if(result.length>0){
 				resp={"key": "Username Exists" }
-				transporter.sendMail(mailOptions,function(error,info){
-					if(error){
-						console.log("error at email "+error);
-					}
-					else{
-						console.log('Email Sent'+info.response);
-					}
-				});
+
+
+// -------------------------------------------------------------------------------------
+//SENDING EMAIL
+				// transporter.sendMail(mailOptions,function(error,info){
+				// 	if(error){
+				// 		console.log("error at email "+error);
+				// 	}
+				// 	else{
+				// 		console.log('Email Sent'+info.response);
+				// 	}
+				// });
+
+
 				res.send(resp);
 
 			}

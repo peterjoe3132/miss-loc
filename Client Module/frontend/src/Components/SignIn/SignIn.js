@@ -3,15 +3,19 @@ import { BrowserRouter as Router, Route,Switch, Link } from "react-router-dom";
 import ForgotPassword from '../ForgotPassword/ForgotPassword.js'
 import SignUp from '../SignUp/SignUp.js'
 
-import {Card ,Button ,Form} from 'react-bootstrap'
+import {Card ,Button ,Form ,Alert} from 'react-bootstrap'
 import './SignIn.css'
 
 class SignIn extends Component{
+	
 	constructor(props){
 		super(props);
 		this.state={
 			username:'',
 			password:''	,
+			username_invalid:false,
+			wrong_password:false,
+			success_login:false		
 		};
 	}
 
@@ -21,7 +25,15 @@ class SignIn extends Component{
 		this.setState({[name]:val});
 	}
 
+	set_state =(state_to_be_set,val)=>{
+		this.setState({
+			[state_to_be_set]:val
+		})
+	}
+
 	handleSubmit = (event) => {
+
+	const pointerToThis=this;
 		event.preventDefault();
 		let data={
 			username:this.state.username,
@@ -49,7 +61,23 @@ class SignIn extends Component{
 		}
 		else{
 			response.json().then(function(data){
-			console.log(data.key)
+				var code=data.key;
+			console.log(code);
+				if(code=='0010'){
+					pointerToThis.set_state('username_invalid',true);
+					pointerToThis.set_state('wrong_password',false);
+
+			}
+			else 
+				if(code=='0020'){
+
+					pointerToThis.set_state('username_invalid',false);
+					pointerToThis.set_state('wrong_password',true);
+				}
+			else 
+				if(code=='0030'){
+					pointerToThis.set_state('success_login',true);
+				}
 		});
 	
 		}
@@ -70,30 +98,32 @@ class SignIn extends Component{
 							  <Card.Body>
 							    <Card.Text>
 									     <Form.Group >
-										    <Form.Control type="text" placeholder="Enter Username" name="username" onChange={this.changeHandler} required/>
-										  									  
+										    <Form.Control type="text" placeholder="Enter Username" name="username" onChange={this.changeHandler} required/>							  
 										    </Form.Group>
 										  <Form.Group >
 										    <Form.Control type="password" placeholder="Enter Password" name="password" onChange={this.changeHandler} required/>
 										  </Form.Group>
 										 </Card.Text>
-
 									    <Button variant="primary" type="submit">Login</Button>
 									    <br/>
 									    <Link to='/forgot'><Button variant="light" id="ForgotPassword">Forgot your password?</Button></Link>
-
 							  </Card.Body>
 							  <Card.Footer className="text-muted">Not a member yet ? <a href="/signup">Join here</a></Card.Footer>
 						</Card>
+						  {this.state.username_invalid &&
+								<Alert variant='warning'>
+							  		Username doesn't exist , you can sign up <a href="/signup">here</a>		
+							  	</Alert>							  	
+							  }
+						  {this.state.wrong_password &&
+								<Alert variant='danger'>
+									Incorrect Password!!
+							  	</Alert>							  	
+							  }
 					</form>
-
 				</div>
-
-
-
 				<Route path="/forgot" component={ForgotPassword} />
 				<Route path="/signup" component={SignUp} />
-
 				</Router>
 			)
 	}
