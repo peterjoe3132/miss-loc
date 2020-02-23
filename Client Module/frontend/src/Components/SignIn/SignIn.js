@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import { BrowserRouter as Router, Route,Switch, Link } from "react-router-dom";
 import ForgotPassword from '../ForgotPassword/ForgotPassword.js'
 import SignUp from '../SignUp/SignUp.js'
+import Dashboard from '../Dashboard/Dashboard.js'
 
 import {Card ,Button ,Form ,Alert} from 'react-bootstrap'
 import './SignIn.css'
@@ -15,7 +16,7 @@ class SignIn extends Component{
 			password:''	,
 			username_invalid:false,
 			wrong_password:false,
-			success_login:false		
+			success_login:true		
 		};
 	}
 
@@ -29,6 +30,7 @@ class SignIn extends Component{
 		this.setState({
 			[state_to_be_set]:val
 		})
+		console.log(this.state.success_login);
 	}
 
 	handleSubmit = (event) => {
@@ -66,11 +68,9 @@ class SignIn extends Component{
 				if(code=='0010'){
 					pointerToThis.set_state('username_invalid',true);
 					pointerToThis.set_state('wrong_password',false);
-
 			}
 			else 
 				if(code=='0020'){
-
 					pointerToThis.set_state('username_invalid',false);
 					pointerToThis.set_state('wrong_password',true);
 				}
@@ -120,10 +120,15 @@ class SignIn extends Component{
 									Incorrect Password!!
 							  	</Alert>							  	
 							  }
+							 {this.state.success_login &&
+							 <Dashboard username={this.state.username}/>
+						}
+						
 					</form>
 				</div>
 				<Route path="/forgot" component={ForgotPassword} />
 				<Route path="/signup" component={SignUp} />
+
 				</Router>
 			)
 	}
