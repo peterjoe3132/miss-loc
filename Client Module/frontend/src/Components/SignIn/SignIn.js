@@ -14,9 +14,10 @@ class SignIn extends Component{
 		this.state={
 			username:'',
 			password:''	,
+			user_id:'',
 			username_invalid:false,
 			wrong_password:false,
-			success_login:true		
+			success_login:false		
 		};
 	}
 
@@ -30,7 +31,6 @@ class SignIn extends Component{
 		this.setState({
 			[state_to_be_set]:val
 		})
-		console.log(this.state.success_login);
 	}
 
 	handleSubmit = (event) => {
@@ -64,7 +64,6 @@ class SignIn extends Component{
 		else{
 			response.json().then(function(data){
 				var code=data.key;
-			console.log(code);
 				if(code=='0010'){
 					pointerToThis.set_state('username_invalid',true);
 					pointerToThis.set_state('wrong_password',false);
@@ -76,7 +75,9 @@ class SignIn extends Component{
 				}
 			else 
 				if(code=='0030'){
+					pointerToThis.set_state('user_id',data.user_id);
 					pointerToThis.set_state('success_login',true);
+
 				}
 		});
 	
@@ -121,7 +122,8 @@ class SignIn extends Component{
 							  	</Alert>							  	
 							  }
 							 {this.state.success_login &&
-							 <Dashboard username={this.state.username}/>
+
+							 <Dashboard username={this.state.username} userId={this.state.user_id}/>
 						}
 						
 					</form>

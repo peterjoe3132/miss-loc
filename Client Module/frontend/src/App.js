@@ -28,9 +28,9 @@ class App extends Component {
     </div>
     <div>LOCATOR</div>
   </h1>
-  <p>
-   this is what the site does and what can be done 
-   </p>
+  <p id='tagline'>
+         Seek. The. CyberSpace.
+</p>
 </div>
 			<Route path="/signup" component={SignUp} />
 			<Route path="/signin" component={SignIn} />

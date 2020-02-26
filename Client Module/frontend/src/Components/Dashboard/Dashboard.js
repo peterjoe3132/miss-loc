@@ -8,12 +8,14 @@ class Dashboard extends Component{
 		super(props);
 			this.state={
 				username: this.props.username ,
+				user_id:this.props.userId,
 				name:'',
 				age: "",
 				gender: "",
 				address: "",
 				image: "",
-				description: ""     
+				description: "",
+				successful_insertion: false      
 
 			}
 		}
@@ -24,6 +26,29 @@ class Dashboard extends Component{
 			[name]:val
 		})
 	}
+	// uploadImage=(event)=>{
+	// 	const files=event.target.files;
+	// 	const myfile=files[0];
+	// 	const imageType=/image.*/
+	// 	if (!myfile.type.match(imageType)) {
+	//     alert('Sorry, only images are allowed')
+	//     return
+	//   }
+	//   else
+	//   if (myfile.size > (1000*1024)) {
+	//     alert('Sorry, the max allowed size for images is 1MB')
+	//     return
+	//   }
+	//   else
+	//   this.state.image=JSON.stringify(myfile);
+	// // console.log(myfile);
+	// }
+	set_state=(state_to_be_set,val)=>{
+		this.setState({
+			[state_to_be_set]:val
+		});
+	}
+
 	handleSubmit=(event)=>{
 		event.preventDefault();
 		let data={
@@ -33,8 +58,9 @@ class Dashboard extends Component{
 			address:this.state.address,
 			image:this.state.image,
 			description:this.state.description,
+			user_id:this.state.user_id
 		}
-		console.log(JSON.stringify(data));
+	var pointerToThis=this;
 	var body_data=JSON.stringify(data);
 	var url="http://127.0.0.1:8080/signin/newsearch"
 
@@ -53,8 +79,12 @@ class Dashboard extends Component{
 		if(response.status!=200){
 			console.log("An Error Has Occured with Code "+ response.status);
 		}else{
-
-		}
+			response.json().then(function(data){
+				if(data.key=='0300'){
+					pointerToThis.set_state('successful_insertion',true);					
+				}
+			})
+			}
 	})
 	.catch(function(error){
 		console.log("Error"+error);	
@@ -75,12 +105,15 @@ class Dashboard extends Component{
 				       <Nav.Item  className="justify-content-end" >
 				        <Nav.Link disabled>  <span id='sign-in-as'>Signed in as {this.state.username}</span></Nav.Link>				      
 				      </Nav.Item>
+				       <Nav.Item  className="justify-content-end" >
+				        <Nav.Link href='/'> Logout</Nav.Link>				      
+				      </Nav.Item>				      
 				    </Nav>
 				  	</Card.Header>
-				  <Card.Body>
+				  <Card.Body id='form-container'>
 				    <Card.Title>We will help you find your dear one, please fill the following</Card.Title>
 					
-					<Form id='form-container'>
+					<Form id='form-container1'>
 
 					  <Form.Row>
 					    <Form.Group as={Col} controlId="formGridName">
@@ -134,6 +167,10 @@ class Dashboard extends Component{
 					  </Button>
 					</Form>				   
 				  </Card.Body>
+				  { this.state.successful_insertion &&
+
+				  	<h1> Succesful Insertion </h1>
+				  }
 				</Card>		
 			</div>
 			)

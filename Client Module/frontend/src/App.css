@@ -6,7 +6,9 @@ body{
   max-width:100%;
   z-index: -100;
 }
-
+#tagline{
+  text-align: center;
+}
 body {
   font-family: Source Sans Pro,sans-serif;
   text-align: center;

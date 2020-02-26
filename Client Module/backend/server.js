@@ -60,7 +60,8 @@ app.post('/signin',function(req,res){
 	connection.query(sql1,username,function(err,result){
 		if(err) throw err;
 
-		var resp={"key": "" };
+		var resp={"key": "",
+		'user_id': ""};
 
 		if(result[0]==undefined){
 			//username doesnt exist
@@ -80,14 +81,16 @@ app.post('/signin',function(req,res){
 				// 	);
 
 				//successful login
-				resp={"key":"0030"};
+				 
+				resp={"key":"0030",
+				user_id:result[0].id};
 				res.send(resp);
 			}
 			else{
 
 				//passwords dont match	
-				 resp={"key":"0020"};
-				 res.send(resp);
+				 resp={"key":"0020"}
+				 res.send(JSON.stringify(resp));
 			}
 		})
 
@@ -158,8 +161,6 @@ app.post('/signin',function(req,res){
 							res.send(resp);
 						}
 					});
-
-
 				}
 			})
 		}
@@ -201,7 +202,28 @@ app.post('/signin',function(req,res){
 		})
 	})
 app.post('/signin/newsearch',function(req,res){
-	
+	var resp={'key': ""};
+	var name=req.body.name;
+	var age=req.body.age;
+	var gender=req.body.gender;
+	var image=req.body.image;
+	var description=req.body.description;
+	var address=req.body.address;
+	var user_id=req.body.user_id;
+	console.log(req.body);
+
+	var sql='INSERT INTO lost_person_details(lost_name,lost_age,user_id,lost_gender,lost_address,lost_image,lost_description) VALUES(?,?,?,?,?,?,?)'
+	connection.query(sql,[name,age,user_id,gender,address,image,description],function(err,result){
+		if(err) throw err;
+		console.log(result.insertId);
+		if(result.insertId>0){
+			//successful insertion
+			resp={"key": "0300"}
+			res.send(resp);
+		}
+	})
+
+
 })
 
 

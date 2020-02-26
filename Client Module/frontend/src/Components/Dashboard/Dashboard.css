@@ -1,17 +1,21 @@
 #dashboard-container{
-  margin-left:-90%; 
-  margin-top:-425px;
-  width:280%;
-  z-index: 1000;
-  height:525px;
+  margin-left:-92%; 
+  margin-top:-550px;
+  width:283%;
+  z-index: 1000000;
+  height:575px;
 }
 #sign-in-as{
 	color:white;
 }
 #form-container{
-	margin-top:2%;
+	margin-top:1%;
 }
 #search-button{
 	width:30%;
 	margin-left: 35%;
+	margin-top: 3%;
+}
+#form-container1{
+	margin-top: 3%;
 }
