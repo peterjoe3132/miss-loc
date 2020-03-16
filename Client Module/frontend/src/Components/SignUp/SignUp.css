@@ -1,0 +1,25 @@
+#container-signup{
+  margin:auto;
+  margin-top: -500px;
+  width:35%;
+  position:top;
+  z-index: 1000;
+  height:300px;
+  }
+  #password-help{
+  	text-transform: capitalize;
+  	text-align: left;
+  	margin-left: 2%;
+  }
+  #success-signup{
+  	padding: 40px;
+  margin-top: -475px;
+  height:475px;
+  text-align: center;
+  }
+ #success-gif{
+ 	margin: 20px;
+ }
+  #success-text{
+  	font-size: 
+  }

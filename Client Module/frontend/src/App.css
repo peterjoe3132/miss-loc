@@ -1,0 +1,115 @@
+body{
+  background-image: url('backdrop.jpg');
+  background-repeat:no-repeat;
+  background-size: cover;
+  background-position: 0px 10px; 
+  max-width:100%;
+  z-index: -100;
+}
+#tagline{
+  text-align: center;
+}
+body {
+  font-family: Source Sans Pro,sans-serif;
+  text-align: center;
+    -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+    z-index: -1;
+
+}
+
+#dust {
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+.title {
+    transform: scale(0);
+    filter: blur(10px);
+  margin:15% 35%;
+
+}
+h1 {
+  font-size: 40px;
+  margin-top: 50px;
+  opacity: 1;
+  position: relative;
+  color: white;
+  font-weight: 800;
+  text-align: center;
+  margin-right: 10px;
+  padding-bottom: 10px;
+  display: inline-block;
+  border-bottom: 3px solid #E3E3EB;
+  letter-spacing: 10px;
+
+  > div {
+    position: relative;
+    display: inline-block;
+    + div {
+      display: block;
+    }
+  }
+  span {
+    letter-spacing: normal;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-style: italic;
+    position: relative;
+    z-index: -1;
+    padding-bottom: 20px;
+    &:before, &:after {
+      content: "";
+      width: 43%;
+      height: 3px;
+      border-radius: 5px;
+      background: #E3E3EB;
+      position: absolute;
+      right: 0;
+      z-index: -2;
+      top: .5em;
+    }
+    &:after {
+      left: 0;
+    }
+  }
+}
+p {
+  font-family: 'Quicksand', sans-serif;
+  text-transform: uppercase;
+  color: #fff;
+  margin-top: 14px;
+  letter-spaceing: 5px;
+  line-height:1.2em;
+  font-weight: 500;
+  
+ 
+  
+}
+
+/*ANimation stuff*/
+.title {
+  animation-name: zoomIn;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 2s;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(.3);
+    filter: blur(10px);
+  }
+  40% {
+    transform: scale(1);
+  }
+  100% {
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
