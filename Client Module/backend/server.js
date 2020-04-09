@@ -3,7 +3,9 @@ const app=express()
 const port=8080;
 const bcrypt=require('bcrypt');
 const session=require('express-session');
-
+const multer=require('multer');
+const path = require('path')
+const {spawn} = require('child_process')
 
 var mysql=require('mysql');
 var cors=require('cors');
@@ -17,6 +19,10 @@ var connection=mysql.createConnection({
 	database:'project',
 	port:'3306'
 });
+
+var code_to_be_send;
+var id;
+var file_name;
 
 app.use(cors());
 app.options('*', cors());  // enable pre-flight
@@ -36,9 +42,35 @@ var transporter=nodemailer.createTransport({
 		pass:'yzhb ivzo enrd mzfv'
 	} 
 });
+//initialising the storing directory
+const storage=multer.diskStorage({
+	destination:function(req,file,cb){
+		cb(null,'./uploads/');
+	},
+	filename:function(req,file,cb){
+		file_name=Date.now()+"_"+file.originalname;
+		cb(null,file_name);
+	}
+});
 
-var code_to_be_send;
-var id;
+const fileFilter=(req,file,cb)=>{
+	if(file.mimetype==='image/jpeg'||file.mimetype==='image/png'){
+		cb(null,true);
+	}
+	else{
+		cb(null,false);
+	}
+};
+
+const upload=multer({
+	storage:storage,
+	limits:{
+		fileSize:1024*1024*5
+	},
+	fileFilter:fileFilter
+});
+
+
 
 app.get('/',function(req,res){
 	connection.query('select 1+1 AS Solution',function(err,result,fields){
@@ -201,7 +233,8 @@ app.post('/signin',function(req,res){
 			}
 		})
 	})
-app.post('/signin/newsearch',function(req,res){
+app.post('/signin/newsearch',upload.single('image'),function(req,res,next){
+
 	var resp={'key': ""};
 	var name=req.body.name;
 	var age=req.body.age;
@@ -210,10 +243,32 @@ app.post('/signin/newsearch',function(req,res){
 	var description=req.body.description;
 	var address=req.body.address;
 	var user_id=req.body.user_id;
-	console.log(req.body);
-
+	// var filename;
+	var filename=req.file.originalname;//to be passed to python file
 	var sql='INSERT INTO lost_person_details(lost_name,lost_age,user_id,lost_gender,lost_address,lost_image,lost_description) VALUES(?,?,?,?,?,?,?)'
-	connection.query(sql,[name,age,user_id,gender,address,image,description],function(err,result){
+
+//invoking external python file pytest.py with arguement as image filename
+	function runScript(){
+	  return spawn('python3', [
+	    "-u", 
+	    path.join(__dirname, 'eval.py'),
+	    "uploads/"+file_name,
+	  ]);
+	}
+	var variable;
+	const subprocess = runScript()
+	// print output of script
+	subprocess.stdout.on('data', (data) => {
+	  console.log(`data:${data}`);
+	});
+	subprocess.stderr.on('data', (data) => {
+	  console.log(`error:${data}`);
+	});
+	subprocess.on('close', () => {
+	  console.log("Closed");
+	});
+
+	connection.query(sql,[name,age,user_id,gender,address,filename,description],function(err,result){
 		if(err) throw err;
 		console.log(result.insertId);
 		if(result.insertId>0){
@@ -222,6 +277,8 @@ app.post('/signin/newsearch',function(req,res){
 			res.send(resp);
 		}
 	})
+
+
 
 
 })
