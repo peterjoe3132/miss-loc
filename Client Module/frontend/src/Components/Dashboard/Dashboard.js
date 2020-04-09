@@ -26,23 +26,26 @@ class Dashboard extends Component{
 			[name]:val
 		})
 	}
-	// uploadImage=(event)=>{
-	// 	const files=event.target.files;
-	// 	const myfile=files[0];
-	// 	const imageType=/image.*/
-	// 	if (!myfile.type.match(imageType)) {
-	//     alert('Sorry, only images are allowed')
-	//     return
-	//   }
-	//   else
-	//   if (myfile.size > (1000*1024)) {
-	//     alert('Sorry, the max allowed size for images is 1MB')
-	//     return
-	//   }
-	//   else
-	//   this.state.image=JSON.stringify(myfile);
-	// // console.log(myfile);
-	// }
+
+	uploadImage=(event)=>{
+		const files=event.target.files;
+		const myfile=files[0];
+		console.log("file type"+myfile);
+		const imageType=/image.*/
+		if (!myfile.type.match(imageType)) {
+	    alert('Sorry, only images are allowed')
+	    return
+	  }
+	  else
+	  if (myfile.size > (1000*1024)) {
+	    alert('Sorry, the max allowed size for images is 1MB')
+	    return
+	  }
+	  else
+	  	this.set_state('image',myfile);
+	  console.log("the file value is "+this.state.image)
+	}
+	
 	set_state=(state_to_be_set,val)=>{
 		this.setState({
 			[state_to_be_set]:val
@@ -51,24 +54,21 @@ class Dashboard extends Component{
 
 	handleSubmit=(event)=>{
 		event.preventDefault();
-		let data={
-			name:this.state.name,
-			age:this.state.age,
-			gender:this.state.gender,
-			address:this.state.address,
-			image:this.state.image,
-			description:this.state.description,
-			user_id:this.state.user_id
-		}
-	var pointerToThis=this;
-	var body_data=JSON.stringify(data);
-	var url="http://127.0.0.1:8080/signin/newsearch"
+		const formData=new FormData();
+		formData.append('name',this.state.name);
+		formData.append('age',this.state.age);
+		formData.append('gender',this.state.gender);
+		formData.append('description',this.state.description);
+		formData.append('user_id',this.state.user_id);
+		formData.append('image',this.state.image);
+		formData.append('image_name',"multer-image"+Date.now())
 
+	var pointerToThis=this;
+	var url="http://127.0.0.1:8080/signin/newsearch"
 	var request= {
 		method:"POST",
-		body:body_data,
+		body:formData,
 		headers: {
-              "Content-Type":"application/json",
               "Access-Control-Allow-Origin":"*",
               'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
               'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With, Accept'
@@ -97,11 +97,9 @@ class Dashboard extends Component{
 				  <Card.Header>
 				    <Nav fill variant="tabs" defaultActiveKey="#new">
 				      <Nav.Item>
-				        <Nav.Link href="#new">New Search</Nav.Link>
+				        <Nav.Link href="#new"> Search</Nav.Link>
 				      </Nav.Item>
-				      <Nav.Item >
-				        <Nav.Link href="#previous">Previous Searches</Nav.Link>
-				      </Nav.Item>
+				   
 				       <Nav.Item  className="justify-content-end" >
 				        <Nav.Link disabled>  <span id='sign-in-as'>Signed in as {this.state.username}</span></Nav.Link>				      
 				      </Nav.Item>
@@ -147,7 +145,7 @@ class Dashboard extends Component{
 					  <Col>
 					  <Form.Group controlId="formGridImage">
 					    <Form.Label>Upload Image</Form.Label>
-					    <Form.Control type='file' placeholder="Upload Image" name='image' onChange={this.handleChange} />
+					    <Form.Control type='file' placeholder="Upload Image" name='image' onChange={this.uploadImage}  multiple/>
 					  </Form.Group>
 					  </Col>
 					  </Row>
@@ -169,7 +167,7 @@ class Dashboard extends Component{
 				  </Card.Body>
 				  { this.state.successful_insertion &&
 
-				  	<h1> Succesful Insertion </h1>
+				  	alert(" Succesful Insertion")
 				  }
 				</Card>		
 			</div>
