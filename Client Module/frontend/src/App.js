@@ -10,7 +10,7 @@ class App extends Component {
   render() {
     return (
      	<Router >
-      <Navbar bg="dark" variant="dark" fixed ='top'>
+      <Navbar bg="dark" variant="dark" fixed ='top' className="fixed-top">
            <Navbar.Brand href="/">Miss-Loc</Navbar.Brand>
            <Nav className="mr-auto">           
         </Nav>
