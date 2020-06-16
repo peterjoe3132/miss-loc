@@ -26,6 +26,7 @@
 			}
 		closeModal=(event)=>{
 			this.set_state('show',false)
+			this.set_state('loading_sign',false)			
 			this.cancelCourse();
 
 		}
@@ -59,9 +60,7 @@
 		  	this.set_state('image',myfile);
 		  console.log("the file value is "+this.state.image)
 		}
-		displayTable=()=>{
-			// console.log(this.state.result_images)
-		}
+		
 		set_state=(state_to_be_set,val)=>{
 			this.setState({
 				[state_to_be_set]:val
@@ -99,13 +98,13 @@
 				response.json().then(function(data){
 					if(data.key=='0300'){
 							pointerToThis.set_state('show',true);	
-							pointerToThis.set_state('loading_sign',false)
+							pointerToThis.set_state('search_found',true)
 
 					}
 					else 
 						if(data.key=='0400'){
 							pointerToThis.set_state('show',true);	
-							pointerToThis.set_state('loading_sign',false)
+							pointerToThis.set_state('search_found',false)
 							pointerToThis.set_state('result_images',data.image)
 							// console.log("DATAA"+pointerToThis.state.result_images)
 
@@ -244,7 +243,7 @@
 
 	        	<div>
 	        	<Alert  variant={"success"}>
-					<h6> Search Results for Name:<b>{this.state.name}</b>< </h6>	 			
+					<h6> Search Results for Name:<b>{this.state.name}</b></h6>	 			
 				   </Alert>
 	        	<Table striped bordered hover>
 				  <thead>
