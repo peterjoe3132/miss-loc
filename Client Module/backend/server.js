@@ -234,8 +234,8 @@ app.post('/signin',function(req,res){
 		})
 	})
 app.post('/signin/newsearch',upload.single('image'),function(req,res,next){
-
-	var resp={'key': ""};
+	console.log("started");
+	var resp={};
 	var name=req.body.name;
 	var age=req.body.age;
 	var gender=req.body.gender;
@@ -255,28 +255,122 @@ app.post('/signin/newsearch',upload.single('image'),function(req,res,next){
 	    "uploads/"+file_name,
 	  ]);
 	}
-	var variable;
+	function myFunction(value, index, array) {
+  	return value.toString();
+	}
+
+	function sendReply(){
+			var variable1=variable.map(myFunction);
+			var images=[];
+			variable1 = variable1.filter(function(entry) { return entry.trim() != '/n'; })
+			if(variable1[0][0]=='~'){
+				console.log("IMAGE NOT FOUND")
+					resp={
+						"key": "0300"
+					}
+				// console.log(JSON.stringify(resp));
+				res.send(resp);
+
+			}
+			else{
+
+
+
+			for(var i=0;i<variable1.length;i++){
+				var arr=[];
+				var k=0;
+				var image={
+					name:'',
+					datetime:'',
+					gps:''
+				};
+				for(var j=0;j<variable1[i].length;j++){
+					if(variable1[i][j]=='#')
+						arr[k++]=j;
+					else 
+					if(variable1[i][j]=='$')
+						arr[k++]=j;
+					else
+					if(variable1[i][j]=='%')
+						arr[k++]=j;
+				}
+				arr[k]=variable1[i].length-1;
+				
+				var arr1=arr;
+					for(var l=0;l<arr1.length-1;l++){
+						var ind=arr1[l];
+						var current_char=variable1[i][ind];
+						if(current_char=='#'){
+							image.name=variable1[i].slice(arr1[l]+1,arr1[l+1])
+						}
+						else 
+						 if(current_char=='%'){
+							image.gps=variable1[i].slice(arr1[l]+1,arr1[l+1])
+						}
+						else
+						 if(current_char=='$'){
+							image.datetime=variable1[i].slice(arr1[l]+1,arr1[l+1])
+						}	
+						}
+				// }
+				console.log("Image name "+image.name)
+				console.log("Image datetime "+image.datetime)
+				if(image.datetime==""){
+					image.datetime="No Data Available"
+				}
+				if(image.gps==""){
+					image.gps="No Data Available"
+				}
+				console.log("Image gps "+image.gps)
+				images.push(image);
+
+			}
+			resp={
+				"key": "0400",
+				"image": images
+			}
+			// console.log(JSON.stringify(resp));
+			res.send(resp);
+
+
+		}
+
+	}
+	var variable=[];
+	var counter=0;
 	const subprocess = runScript()
 	// print output of script
 	subprocess.stdout.on('data', (data) => {
-	  console.log(`data:${data}`);
+	  variable[counter++]=data;
+	  // console.log("data is "+data);
 	});
 	subprocess.stderr.on('data', (data) => {
 	  console.log(`error:${data}`);
 	});
 	subprocess.on('close', () => {
-	  console.log("Closed");
+	  counter=-1;
+	  sendReply();
+	  console.log("Closed"+ "counter value ="+counter);
+
+
 	});
 
-	connection.query(sql,[name,age,user_id,gender,address,filename,description],function(err,result){
-		if(err) throw err;
-		console.log(result.insertId);
-		if(result.insertId>0){
-			//successful insertion
-			resp={"key": "0300"}
-			res.send(resp);
-		}
-	})
+
+	// connection.query(sql,[name,age,user_id,gender,address,filename,description],function(err,result){
+		// if(err) throw err;
+		// console.log("Insertion ID "+result.insertId);
+		// if(result.insertId>0){
+
+		// 	console.log("if condtn.")
+		// 	console.log(variable)
+		// 	//successful insertion
+		// 	resp={"key": "0300"}
+		// 	res.send(resp);
+		// }
+		// else {
+		// 	console.log("false if condition")
+		// }
+	// })
 
 
 
