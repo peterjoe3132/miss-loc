@@ -39,7 +39,7 @@ var transporter=nodemailer.createTransport({
     path: '/usr/sbin/sendmail',	
 	auth: {
 		user:'peterjoep@yahoo.com',
-		pass:'yzhb ivzo enrd mzfv'
+		pass:'********************'
 	} 
 });
 //initialising the storing directory
